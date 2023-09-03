@@ -1,0 +1,14 @@
+//
+// Created by gerdzio21 on 06.08.2023.
+//
+
+#ifndef UNTITLED_BOARDCONFIGURATORMODEL_H
+#define UNTITLED_BOARDCONFIGURATORMODEL_H
+
+
+class BoardConfiguratorModel {
+
+};
+
+
+#endif //UNTITLED_BOARDCONFIGURATORMODEL_H

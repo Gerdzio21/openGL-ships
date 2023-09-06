@@ -6,9 +6,9 @@
 #define SHIPS_SHIPPLACER_H
 
 
-#include "Ships/Ship.h"
-#include "ShipOrientation.h"
-#include "Coordinate.h"
+#include "../GameElements/Ships/Ship.h"
+#include "../GameElements/ShipOrientation.h"
+#include "../GameElements/Coordinate.h"
 
 class ShipPlacerController {
     Ship* ship;
@@ -86,10 +86,6 @@ public:
                 rotateShip();
                 break;
         }
-    }
-
-    void drawShip(int x,int y) {
-        ship->drawShip(x+(hullCoordinate.col-'A'),-y+hullCoordinate.row-1,shipOrientation,0.2123f,0.0303f, 0.78731233f);
     }
 
     void emptyPlacer(){

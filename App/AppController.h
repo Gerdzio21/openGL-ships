@@ -22,10 +22,6 @@ public:
     AppController() {
         appViewer = new AppViewer();
         appModel = new AppModel();
-        menuController = new MenuController();
-        boardConfiguratorController = new BoardConfiguratorController();
-        sceneController = boardConfiguratorController;
-        gameController = new GameController();
     }
 
     void run() {
@@ -51,47 +47,38 @@ public:
                     }
                     break;
                 case AppState::BOARD_INIT:
-                    if (boardConfiguratorController->isBoardReady()) {
+                    if (appModel->isGameReady()) {
                         if (key == 13) { //ENTER
                             selectGameConnectionType();
+                            appModel->setLocalPlayerBoard();
                         }
                     } else {
-                        sceneController->handleKeyPress(key, x, y);
+                        appModel->getSceneController()->handleKeyPress(key, x, y);
                     }
                     break;
                 case AppState::GAME:
-                    sceneController->handleKeyPress(key, x, y);
+                    appModel->getSceneController()->handleKeyPress(key, x, y);
                     break;
             }
         }
     }
     void restartApp() {
         appModel->changeAppState(AppState::MENU);
-        delete boardConfiguratorController;
-        delete gameController;
-        boardConfiguratorController = new BoardConfiguratorController();
-        gameController = new GameController();
+//        delete boardConfiguratorController;
+//        boardConfiguratorController = new BoardConfiguratorController();
         appModel->changeAppState(AppState::WELCOME_SCREEN);
     }
 
     void startBoardInitialization() {
         appModel->changeAppState(AppState::BOARD_INIT);
-        sceneController = boardConfiguratorController;
     }
 
     void newGame() {
-        appModel->changeAppState(AppState::GAME);
-        sceneController = gameController;
-        gameController->setUserBoard(boardConfiguratorController->getBoard());
-        gameController->createGame();
-        //gameController->getOpponentMove();
+        appModel->newGame();
     }
 
     void joinGame() {
-        gameController->setUserBoard(boardConfiguratorController->getBoard());
-        sceneController = gameController;
-        appModel->changeAppState(AppState::GAME);
-        gameController->joinGame();
+        appModel->joinGame();
     }
 
     void selectGameConnectionType() {
@@ -106,12 +93,8 @@ public:
     void draw() {
         if (appModel->getAppState() == AppState::WELCOME_SCREEN) {
             appViewer->displayWelcomeScreen();
-        } else if (appModel->getAppState() == AppState::MENU) {
-            menuController->showMenu();
-        } else if (appModel->getAppState() == AppState::BOARD_INIT) {
-            boardConfiguratorController->showBoard();
-        } else if (appModel->getAppState() == AppState::GAME) {
-            gameController->showGame();
+        } else if (appModel->getAppState() == AppState::GAME || appModel->getAppState() == AppState::MENU || appModel->getAppState() == AppState::BOARD_INIT) {
+            appModel->getSceneViewer()->displayScene();
         } else {
             appViewer->display();
         }
@@ -119,11 +102,8 @@ public:
     }
 
     BoardConfiguratorController* boardConfiguratorController;
-    GameController* gameController;
     AppViewer* appViewer;
     AppModel* appModel;
-    MenuController* menuController;
-    SceneController* sceneController;
 };
 
 

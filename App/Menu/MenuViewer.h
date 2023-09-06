@@ -9,9 +9,20 @@
 #include <iostream>
 #include <stdlib.h>
 #include "../../Screen.h"
+#include "../SceneViewer.h"
 
-class MenuViewer{
+class MenuViewer: public SceneViewer{
 public:
+    MenuViewer() = default;
+    virtual void displayScene(){
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Czarne tło
+        glClear(GL_COLOR_BUFFER_BIT);
+        // Renderowanie menu
+        glColor3f(1.0f, 1.0f, 1.0f); // Biały kolor
+        drawText(300, 400, "MENU");
+        drawText(300, 350, "PRESS N to start new game");
+        drawText(300, 300, "PRESS J to join the game");
+    }
     void drawText(int x, int y, const std::string& text) {
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
@@ -35,15 +46,7 @@ public:
         glPopMatrix();
     }
 
-    void display(){
-            glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Czarne tło
-            glClear(GL_COLOR_BUFFER_BIT);
-            // Renderowanie menu
-            glColor3f(1.0f, 1.0f, 1.0f); // Biały kolor
-            drawText(300, 400, "MENU");
-            drawText(300, 350, "PRESS N to start new game");
-            drawText(300, 300, "PRESS J to join the game");
-    }
+
 };
 
 

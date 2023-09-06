@@ -15,12 +15,7 @@ class MenuController {
 
 public:
     MenuController(){
-        menuViewer = new MenuViewer();
     }
-    void showMenu(){
-        menuViewer->display();
-    }
-    MenuViewer* menuViewer;
 };
 
 

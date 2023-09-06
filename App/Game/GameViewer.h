@@ -7,10 +7,23 @@
 
 
 #include "GameModel.h"
+#include "../SceneViewer.h"
 
-class GameViewer {
+class GameViewer : public SceneViewer{
+
 
 public:
+    GameViewer(GameModel* gameModelPtr){
+        gameModel = gameModelPtr;
+    }
+
+    virtual void displayScene(){
+            gameModel->getLocalPlayerBoard()->drawBoard(-10, 10);
+            gameModel->getOpponentBoard()->drawBoard(1, 10);
+            display(300,200,gameModel->getText());
+            display(300,100,gameModel->getMessage());
+    }
+
     void drawText(int x, int y, const std::string& text) {
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
@@ -38,6 +51,8 @@ public:
         glColor3f(1.0f, 0.0f, 1.0f);
         drawText(x, y, text);
     }
+private:
+    GameModel* gameModel;
 };
 
 

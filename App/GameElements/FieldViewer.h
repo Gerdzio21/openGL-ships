@@ -16,9 +16,6 @@ public:
             case OccupiedByShip:
                 drawSquare(col,row,0.78f, 0.745f, 0.2137f);
                 break;
-//            case SurroundsShip:
-//                drawSquare(col,row,0.78f, 0.356f, 0.2137f);
-//                break;
             case Hit:
                 drawX(col,row,1.0f,0.0f,0.0f);
                 drawSquareOutline(col,row,0.0f,1.0f,0.0f);
@@ -67,7 +64,6 @@ private:
     static void drawSquareOutline(int col, int row, GLfloat R, GLfloat G, GLfloat B) {
 
         glColor3f(R, G, B);
-        std::string filePath = "field.png";
         glLineWidth(2);
         glBegin(GL_LINE_LOOP);
         glVertex2f(col/11.0, -row/11.0);

@@ -10,19 +10,24 @@
 #include <memory>
 #include <stdexcept>
 #include <algorithm>
-#include "Ships/Ship.h"
-#include "Ships/ShipFactory.h"
+#include "../GameElements/Ships/Ship.h"
+#include "../GameElements/Ships/ShipFactory.h"
 #include "ShipContainerViewer.h"
-
+/**
+ * @class ShipContainerController
+ * @brief Controller for ship container management.
+ *
+ * The `ShipContainerController` class is responsible for managing the ship container
+ * in the game. It handles the selection, removal, and drawing of ships in the container.
+ */
 class ShipContainerController {
-    std::vector<Ship*> ships;
-    int selectedShipIndex;
-    ShipContainerViewer* shipContainerViewer;
-    ShipFactory* factory;
-
 public:
+    /**
+     * Constructor for the `ShipContainerController` class.
+     * Initializes the controller with an empty container and fills it with ships.
+     */
     ShipContainerController() {
-        shipContainerViewer =new ShipContainerViewer();
+        shipContainerViewer = new ShipContainerViewer();
         emptyContainer();
         fillContainer();
         selectedShipIndex  = 0;
@@ -57,31 +62,6 @@ public:
         return ships.empty();
     }
 
-    void drawContainer(){
-        shipContainerViewer->drawContainer(-5,-5);
-        int x = -10;
-        int y = 1;
-        if(!ships.empty()) {
-            Ship* previousShip = ships[0];
-            for (auto ship: ships) {
-                if (previousShip != ship) {
-                    if (x + previousShip->getLength() + ship->getLength() < 11) {
-                        x = x + previousShip->getLength() + 1;
-                    } else {
-                        x = -10;
-                        y = y + 2;
-                    }
-                }
-                if (ship == ships[selectedShipIndex]) {
-                    ship->drawShipOutline(x, y, ShipOrientation::Horizontal);
-                } else {
-                    ship->drawShip(x, y, ShipOrientation::Horizontal);
-                }
-                previousShip = ship;
-            }
-        }
-    }
-
     void selectNextShip() {
         selectedShipIndex=(selectedShipIndex+1)%ships.size();
     }
@@ -93,7 +73,12 @@ public:
             selectedShipIndex=(selectedShipIndex-1)%ships.size();
         }
     }
-
+    int getSelectedShipIndex(){
+        return selectedShipIndex;
+    }
+    std::vector<Ship*> getShips(){
+        return ships;
+    };
     void handleKeyPress(unsigned char key, int x, int y) {
         switch (tolower(key)){
             case 'w':
@@ -127,6 +112,11 @@ private:
             ships.push_back(factory->createShip());
         }
     }
+private:
+    std::vector<Ship*> ships;
+    int selectedShipIndex;
+    ShipContainerViewer* shipContainerViewer;
+    ShipFactory* factory;
 };
 
 

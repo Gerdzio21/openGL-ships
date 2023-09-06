@@ -9,7 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <map>
-#include "GameController.h"
+#include "../GameElements/Coordinate.h"
 enum AttackResult {
     HIT,
     MISS,
@@ -59,14 +59,11 @@ enum EndGameReason {
 };
 class GameModel { ;
 
-    ~GameModel() = default;
-
 public:
-    GameModel(Board* playerBoard, Board* opponentBoard ) : playerBoard(playerBoard), opponentBoard(opponentBoard){
+    GameModel(Board* localPlayerBoardPtr){
+        localPlayerBoard = localPlayerBoardPtr;
+        opponentBoard = new Board();
         turn = LOCAL_PLAYER;
-    }
-    void setUserBoard(Board* board){
-        playerBoard = board;
     }
     bool isAttackMoveValid(Coordinate coordinate){
        return (coordinate.col >= 'A' && coordinate.col <= 'J' && coordinate.row>=1 && coordinate.row<=10);
@@ -90,16 +87,16 @@ public:
     AttackResult processOpponentAttack(std::string potentialCoordinates) {
         Coordinate coordinates = Coordinate(potentialCoordinates);
         if(isAttackMoveValid(coordinates)) {
-            Field* field = playerBoard->getField(coordinates.col, coordinates.row);
+            Field* field = localPlayerBoard->getField(coordinates.col, coordinates.row);
             if (field != nullptr) {
                 if (field->getFieldStatus() == FieldStatus::OccupiedByShip) {
                     int sectorIdx = field->getShipSectorIdx();
                     Ship* ship = field->getShip();
                     ship->hitSector(sectorIdx);
-                    markField(playerBoard->getField(coordinates.col, coordinates.row), "HIT");
+                    markField(localPlayerBoard->getField(coordinates.col, coordinates.row), "HIT");
                     if(ship->isDestroyed()){
-                        playerBoard->moveToDestroyedShips(ship);
-                        if(playerBoard->getNumberOfAliveShips() == 0){
+                        localPlayerBoard->moveToDestroyedShips(ship);
+                        if(localPlayerBoard->getNumberOfAliveShips() == 0){
                             turn = END;
                             return GAME_END;
                         }
@@ -107,18 +104,60 @@ public:
                     }
                     return HIT;
                 } else if (field->getFieldStatus() == FieldStatus::Free || field->getFieldStatus() == FieldStatus::SurroundsShip){
-                    markField(playerBoard->getField(coordinates.col, coordinates.row), "MISS");
+                    markField(localPlayerBoard->getField(coordinates.col, coordinates.row), "MISS");
                     turn = LOCAL_PLAYER;
                     return MISS;
                 }
             }
         }
+        return GAME_END;
+    }
+
+    Board* getLocalPlayerBoard() {
+        return localPlayerBoard;
+    }
+    Board* getOpponentBoard() {
+        return opponentBoard;
+    }
+
+    ~GameModel() = default;
+
+    void setMessage(std::string msg) {
+        message = msg;
+    }
+
+    void clearText() {
+        text.clear();
+    }
+    void clearMessage() {
+        message.clear();
+    }
+
+    std::string getText() {
+        return text;
+    }
+
+    void textAppend(char c) {
+        text +=c;
+    }
+
+
+    void removeFromText() {
+        if(!text.empty()) {
+            text.pop_back();
+        }
+    }
+
+    std::string getMessage() {
+        return message;
     }
 
 private:
-    Board* playerBoard;
+    Board* localPlayerBoard;
     Board* opponentBoard;
     Turn turn;
+    std::string text = "";
+    std::string message = "";
 
     void markField(Field* field, std::string attackResult) {
         if (attackResult =="HIT"){

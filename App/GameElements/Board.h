@@ -119,6 +119,9 @@ public:
     }
 
 public:
+    std::vector<std::vector<Field*>> getBoardAsVector(){
+        return board;
+    }
     void drawBoard(int x, int y) {
         boardViewer->drawBoard(x, y, board);
     }

@@ -19,24 +19,17 @@
 class GameController: public SceneController{
 public:
     void handleKeyPress(unsigned char key, int x, int y) {
-        if (key == 8 && !text.empty()) {
-            text.pop_back();
+        if (key == 8) {
+            gameModel->removeFromText();//text.pop_back();
         } else if (key == 13) {
             enterMove();
         } else {
-            message.clear();
-            text += (char) toupper(key);
+            gameModel->clearMessage();
+            gameModel->textAppend((char) toupper(key));
         }
     }
-    GameController(){
-        playerBoard = new Board();
-        opponentBoard = new Board();
-        gameModel = new GameModel(playerBoard, opponentBoard);
-    }
-
-    void setUserBoard(Board* board){
-        playerBoard = board;
-        gameModel ->setUserBoard(board);
+    GameController(GameModel* gameModelPtr){
+        gameModel = gameModelPtr;
     }
 
     void createGame(){
@@ -49,9 +42,9 @@ public:
     }
 
     void enterMove() {
-        Coordinate coordinates = Coordinate(text);
+        Coordinate coordinates = Coordinate(gameModel->getText());
         if(gameModel->isAttackMoveValid(coordinates)){
-            text.clear();
+            gameModel->clearText();
             Response response = onlineGameController->attack(coordinates);
             processAttackResponse(response, coordinates);
         }else{
@@ -67,7 +60,7 @@ public:
                     onlineGameController->postReadyForAnswering();
                     getOpponentMove();
                 }else if(gameModel->getTurn() == END){
-                    message = "GAME END";
+                    gameModel->setMessage("GAME END");
                 }
             }
         }else{
@@ -86,7 +79,7 @@ public:
                 if(gameModel->getTurn() == LOCAL_PLAYER){
                     onlineGameController->getReadyForAnswering();
                 } else if(gameModel->getTurn() == END){
-                    message = "GAME END";
+                    gameModel->setMessage("GAME END");
                 }else{
                     getOpponentMove();
                 }
@@ -102,26 +95,12 @@ public:
         }
     }
     void wrongMove() {
-        text.clear();
-        message = "WRONG MOVE!";
-    }
-
-
-    void showGame() {
-        playerBoard->drawBoard(-10, 10);
-        opponentBoard->drawBoard(1, 10);
-        gameViewer->display(300,200,text);
-        gameViewer->display(300,100,message);
+        gameModel->clearText();//.clear();
+        gameModel->setMessage("WRONG MOVE!");
     }
 
 private:
-    std::string text = "";
-    std::string message = "";
-    GameState turn;
-    GameViewer* gameViewer;
     GameModel* gameModel;
-    Board* playerBoard;
-    Board* opponentBoard;
     OnlineGameController* onlineGameController;
 };
 

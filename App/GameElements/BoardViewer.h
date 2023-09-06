@@ -4,24 +4,36 @@
 
 #ifndef UNTITLED_BOARDVIEWER_H
 #define UNTITLED_BOARDVIEWER_H
+
 #include <Gl/freeglut.h>
 #include <vector>
 #include "Field.h"
 #include "FieldViewer.h"
 
 
-
-
+/**
+ * @class BoardViewer
+ * @brief Handles rendering of the game board.
+ *
+ * The `BoardViewer` class is responsible for rendering the game board, including its fields and their statuses.
+ */
 class BoardViewer {
 public:
-    void drawBoard(int x, int y, std::vector<std::vector<Field*>> board){
-        GLfloat step = (600/22.0f);
-        GLfloat xOffset = 300.0f+(x-1)*step+step/2-glutBitmapWidth(GLUT_BITMAP_HELVETICA_12, '1');
-        GLfloat yOffset = 600.0f-step/2;
+    /**
+     * @brief Draw the game board.
+     *
+     * @param x The x-coordinate for rendering the board.
+     * @param y The y-coordinate for rendering the board.
+     * @param board The 2D vector representing the game board.
+     */
+    void drawBoard(int x, int y, std::vector<std::vector<Field*>> board) {
+        GLfloat step = (600 / 22.0f);
+        GLfloat xOffset = 300.0f + (x - 1) * step + step / 2 - glutBitmapWidth(GLUT_BITMAP_HELVETICA_12, '1');
+        GLfloat yOffset = 600.0f - step / 2;
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
                 FieldStatus status = board[row][col]->getFieldStatus();
-                FieldViewer::drawField(row-y, col+x, status);
+                FieldViewer::drawField(row - y, col + x, status);
             }
         }
         for (int row = 0; row < 10; row++) {
@@ -38,10 +50,10 @@ public:
                               yOffset - step * (row + 1));
                 glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, '1');
                 float charWidth = glutBitmapWidth(GLUT_BITMAP_HELVETICA_12, '1');
-                glRasterPos2f(xOffset+charWidth,
+                glRasterPos2f(xOffset + charWidth,
                               yOffset - step * (row + 1));
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, '0');
-        }else{
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, '0');
+            } else {
                 glRasterPos2f(xOffset,
                               yOffset - step * (row + 1));
                 glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, (char) row + '1');
@@ -62,8 +74,8 @@ public:
             glPushMatrix();
             glLoadIdentity();
             glColor3f(1.0f, 1.0f, 1.0f);
-            xOffset = 300.0f+(x-1)*step+step/2-glutBitmapWidth(GLUT_BITMAP_HELVETICA_12, (char) col + 'A');
-            glRasterPos2f(xOffset + step*(col+1), yOffset);
+            xOffset = 300.0f + (x - 1) * step + step / 2 - glutBitmapWidth(GLUT_BITMAP_HELVETICA_12, (char) col + 'A');
+            glRasterPos2f(xOffset + step * (col + 1), yOffset);
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, (char) col + 'A');
             glMatrixMode(GL_MODELVIEW);
             glPopMatrix();

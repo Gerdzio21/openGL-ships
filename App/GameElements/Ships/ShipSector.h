@@ -14,13 +14,15 @@ public:
     ShipSector() {
         health = 100;
     }
+
     void damage(int damageValue) {
         if (isDestroyed()) {
             throw AttackException("Sector is already crashed!");
         }
         health -= damageValue;
     }
-    [[nodiscard]] bool isDestroyed() const{
+
+    [[nodiscard]] bool isDestroyed() const {
         return health <= 0;
     }
 };

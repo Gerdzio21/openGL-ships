@@ -12,9 +12,9 @@ class AttackException : public std::exception {
 private:
     std::string message;
 public:
-    explicit AttackException(const char *msg) : message(msg) {}
+    explicit AttackException(const char* msg) : message(msg) {}
 
-    [[nodiscard]] const char *what() const noexcept override {
+    [[nodiscard]] const char* what() const noexcept override {
         return message.c_str();
     }
 };

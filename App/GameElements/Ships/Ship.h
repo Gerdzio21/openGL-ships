@@ -44,7 +44,7 @@ public:
 
     bool isDestroyed() {
         bool haveLivingSectors = false;
-        for (ShipSector*  sector: shipSectors) {
+        for (ShipSector* sector: shipSectors) {
             if (!sector->isDestroyed()) {
                 haveLivingSectors = true;
                 break;
@@ -68,15 +68,16 @@ public:
         }
     }
 
-    void drawShip(int x, int y, ShipOrientation shipOrientation, GLfloat R, GLfloat G, GLfloat B){
-        shipViewer -> drawShip(x,y,this->getLength(),shipOrientation,R,G,B);
+    void drawShip(int x, int y, ShipOrientation shipOrientation, GLfloat R, GLfloat G, GLfloat B) {
+        shipViewer->drawShip(x, y, this->getLength(), shipOrientation, R, G, B);
     }
-    void drawShip(int x, int y, ShipOrientation shipOrientation){
-        shipViewer -> drawShip(x,y,this->getLength(),shipOrientation);
+
+    void drawShip(int x, int y, ShipOrientation shipOrientation) {
+        shipViewer->drawShip(x, y, this->getLength(), shipOrientation);
     }
 
     void drawShipOutline(int x, int y, ShipOrientation shipOrientation) {
-        shipViewer -> drawShipOutline(x,y,this->getLength(),shipOrientation);
+        shipViewer->drawShipOutline(x, y, this->getLength(), shipOrientation);
     }
 };
 

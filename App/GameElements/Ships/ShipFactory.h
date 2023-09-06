@@ -16,6 +16,7 @@
 class ShipFactory {
 public:
     virtual Ship* createShip() = 0;
+
     virtual ~ShipFactory() = default;
 };
 

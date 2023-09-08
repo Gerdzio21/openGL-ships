@@ -20,32 +20,14 @@ private:
     Ship* ship;
     int shipSectorIdx;
 public:
-    Field(){
-        fieldStatus = Free;
-        ship = nullptr;
-        shipSectorIdx = -1;
-    }
+    Field();
     ~Field() = default;
-    FieldStatus getFieldStatus(){
-        return fieldStatus;
-    }
-    void setFieldStatus(FieldStatus newFieldStatus){
-        fieldStatus = newFieldStatus;
-    }
-    void placeShip(Ship* ship1, int shipSector){
-        ship = ship1;
-        shipSectorIdx = shipSector;
-        fieldStatus=OccupiedByShip;
-    }
-    bool isFree() const {
-        return fieldStatus==Free;
-    }
-    Ship* getShip() const {
-        return ship;
-    }
-    int getShipSectorIdx() const {
-        return shipSectorIdx;
-    }
+    FieldStatus getFieldStatus();
+    void setFieldStatus(FieldStatus newFieldStatus);
+    void placeShip(Ship* ship1, int shipSector);
+    bool isFree() const;
+    Ship* getShip() const;
+    int getShipSectorIdx() const;
 
 
 };

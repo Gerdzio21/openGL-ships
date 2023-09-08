@@ -23,81 +23,18 @@ enum ConnectionMember{
 class ConnectionManager {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 public:
-    int startServerGame() {
-        if(selectedConnectionMember != UNDEFINED){
-            std::cout<< "THROW EXCEPTION HERE!";
-        }
-        server.StartListening(12345);
-        selectedConnectionMember = SERVER;
-        CONSOLE_SET_TEXT_COLOR_BLUE
-        std::cout << "[log] STATUS --- Server started" << std::endl;
-        CONSOLE_RESET_TEXT_COLOR
-        return 0;
-    }
+    int startServerGame();
 
-    int startClientGame(const char* ipAddress, int port) {
-        if(selectedConnectionMember != UNDEFINED){
-            std::cout<< "THROW EXCEPTION HERE!";
-        }
-        client.Connect(ipAddress, port);
-        selectedConnectionMember = CLIENT;
-        CONSOLE_SET_TEXT_COLOR_BLUE
-        std::cout << "[log] STATUS --- Server started" << std::endl;
-        CONSOLE_RESET_TEXT_COLOR
-        return 0;
-    }
-    std::string receiveMessage(TcpInterface* tcpInterface){
-        char buffer[bufferSize];
-        CONSOLE_SET_TEXT_COLOR_BLUE
-        std::cout << "[log] STATUS --- Waiting to receive a message..." << std::endl;
-        CONSOLE_RESET_TEXT_COLOR
-        int bytesReceived = tcpInterface->messageReceive(buffer, bufferSize);
-        if (bytesReceived > 0) {
-            buffer[bytesReceived] = '\0';
-            std::cout << "Received: " << buffer << std::endl;
-            return buffer;
-        }else{
-            CONSOLE_SET_TEXT_COLOR_RED
-            std::cout << "Disconnected" << std::endl;
-            CONSOLE_RESET_TEXT_COLOR
-        }
-        return "";
-    }
-    std::string receiveMessage(){
-        if(selectedConnectionMember == SERVER){
-           return receiveMessage( &server);
-        }
-        if(selectedConnectionMember == CLIENT){
-           return receiveMessage( &client);
-        }
-        return "";
-    }
+    int startClientGame(const char* ipAddress, int port);
+    std::string receiveMessage(TcpInterface* tcpInterface);
+    std::string receiveMessage();
 
-    void sendMessage(std::string message){
-        if(selectedConnectionMember == SERVER){
-            sendMessage(message, &server);
-        }
-        if(selectedConnectionMember == CLIENT){
-            sendMessage(message, &client);
-        }
-    }
+    void sendMessage(std::string message);
 
-    void sendMessage(std::string message,TcpInterface* tcpInterface){
-        CONSOLE_SET_TEXT_COLOR_BLUE
-        std::cout << "[log] STATUS --- Sending a message..." << std::endl;
-        CONSOLE_RESET_TEXT_COLOR
-        tcpInterface->messageSend(message.c_str());
-    }
+    void sendMessage(std::string message,TcpInterface* tcpInterface);
 
     ConnectionManager()= default;
-    ~ConnectionManager(){
-        if(selectedConnectionMember == SERVER){
-            server.closeConnection();
-        }
-        if(selectedConnectionMember == CLIENT){
-            client.closeConnection();
-        }
-    }
+    ~ConnectionManager();
 
 
 private:

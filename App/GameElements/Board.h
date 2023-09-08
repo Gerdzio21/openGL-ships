@@ -10,6 +10,7 @@
 #include "Field.h"
 #include "FieldViewer.h"
 #include "BoardViewer.h"
+#include <algorithm>
 
 /**
  * @class Board
@@ -31,26 +32,14 @@ private:
      *
      * @param ship The ship to add.
      */
-    void addShipToAliveShips(Ship* ship) {
-        shipsAlive.push_back(ship);
-    }
+    void addShipToAliveShips(Ship* ship);
 
 
 public:
     /**
      * @brief Destructor for the `Board` class.
      */
-    ~Board() {
-        for (std::vector<Field*>& row: board) {
-            for (Field* field: row) {
-                delete field;
-            }
-            row.clear();
-        }
-        for (Ship* ship: shipsOnBoard) {
-            delete ship;
-        }
-    }
+    ~Board();
 
     /**
     * @brief Initialize a field on the board.
@@ -58,11 +47,7 @@ public:
     * @param col The column of the field.
     * @param row The row of the field.
     */
-    void initializeField(char col, int row) {
-        int x = (int) col - (int) 'A';
-        int y = row - 1;
-        board[y][x] = new Field();
-    }
+    void initializeField(char col, int row);
 
     /**
     * @brief Get a field at a specific location on the board.
@@ -71,14 +56,7 @@ public:
     * @param row The row of the field.
     * @return Pointer to the field if it exists, otherwise nullptr.
     */
-    Field* getField(char col, int row) {
-        if (col >= 'A' && col <= 'J' && row >= 1 && row <= 10) {
-            int x = (int) col - (int) 'A';
-            int y = row - 1;
-            return board[y][x];
-        }
-        return nullptr;
-    }
+    Field* getField(char col, int row);
 
     /**
     * @brief Set the status of a field on the board.
@@ -87,50 +65,28 @@ public:
     * @param row The row of the field.
     * @param fieldStatus The status to set on the field.
     */
-    void setFieldStatus(char col, int row, FieldStatus fieldStatus) {
-        int x = (int) col - (int) 'A';
-        int y = row - 1;
-        if (y >= 0 && y < board.size()) {
-            if (x >= 0 && board[y].size() > x) {
-                board[y][x]->setFieldStatus(fieldStatus);
-            } else {
-                //std::cout<<"NO CHYBA NIE\n";
-            }
-        }
-
-    }
+    void setFieldStatus(char col, int row, FieldStatus fieldStatus);
 
     /**
     * @brief Add a ship to the board.
     *
     * @param ship The ship to add.
     */
-    void addShipToBoard(Ship* ship) {
-        shipsOnBoard.push_back(ship);
-        addShipToAliveShips(ship);
-    }
+    void addShipToBoard(Ship* ship);
 
     /**
      * @brief Get the number of alive ships on the board.
      *
      * @return The number of alive ships.
      */
-    int getNumberOfAliveShips() {
-        return shipsAlive.size();
-    }
+    int getNumberOfAliveShips();
 
     /**
     * @brief Move a ship to the list of destroyed ships.
     *
     * @param ship The ship to move to the list of destroyed ships.
     */
-    void moveToDestroyedShips(Ship* ship) {
-        auto it = std::find(shipsAlive.begin(), shipsAlive.end(), ship);
-        if (it != shipsAlive.end()) {
-            shipsAlive.erase(it);
-        }
-        shipsDestroyed.push_back(ship);
-    }
+    void moveToDestroyedShips(Ship* ship);
 
     /**
         * @brief Place a ship sector on the board.
@@ -140,25 +96,14 @@ public:
         * @param ship The ship to which the sector belongs.
         * @param shipSector The index of the ship sector to place.
         */
-    void placeShipSector(char col, int row, Ship* ship, int shipSector) {
-        int x = (int) col - (int) 'A';
-        int y = row - 1;
-        board[y][x]->placeShip(ship, shipSector);
-    }
+    void placeShipSector(char col, int row, Ship* ship, int shipSector);
 
     /**
     * @brief Constructor for the `Board` class.
     *
     * Initializes the game board and its fields.
     */
-    Board() : board(10, std::vector<Field*>(10)) {
-        boardViewer = new BoardViewer();
-        for (int i = (int) 'A'; i <= (int) 'J'; i++) {
-            for (int j = 1; j <= 10; j++) {
-                initializeField((char) i, j);
-            }
-        }
-    }
+    Board();
 
 public:
     /**
@@ -166,9 +111,7 @@ public:
  *
  * @return The board as a 2D vector of fields.
  */
-    std::vector<std::vector<Field*>> getBoardAsVector() {
-        return board;
-    }
+    std::vector<std::vector<Field*>> getBoardAsVector();
 };
 
 

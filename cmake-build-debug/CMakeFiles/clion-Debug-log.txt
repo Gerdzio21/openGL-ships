@@ -1,4 +1,0 @@
-"C:\Program Files\JetBrains\CLion 2022.3.3\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2022.3.3/bin/ninja/win/x64/ninja.exe" -G Ninja -S "E:\Prywatne\PW\SEM VI\untitled" -B "E:\Prywatne\PW\SEM VI\untitled\cmake-build-debug"
--- Configuring done
--- Generating done
--- Build files have been written to: E:/Prywatne/PW/SEM VI/untitled/cmake-build-debug

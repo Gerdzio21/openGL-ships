@@ -22,14 +22,7 @@ public:
      *
      * @param shipPlacerController Pointer to the ShipPlacerController managing ship placement.
      */
-    void drawShipToPlace(ShipPlacerController* shipPlacerController) {
-        Coordinate hullCoordinate = shipPlacerController->getHullPosition();
-        ShipOrientation shipOrientation = shipPlacerController->getShipOrientation();
-        if (!shipPlacerController->isPlacerEmpty()) {
-            shipPlacerController->getShip()->drawShip(-5 + (hullCoordinate.col - 'A'), -10 + hullCoordinate.row - 1,
-                                                      shipOrientation, 0.2123f, 0.0303f, 0.78731233f);
-        }
-    }
+    void drawShipToPlace(ShipPlacerController* shipPlacerController);
 };
 
 

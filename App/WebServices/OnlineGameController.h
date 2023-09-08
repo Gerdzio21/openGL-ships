@@ -22,7 +22,9 @@ public:
         if(hostGame){
             connectionManager->startServerGame();
         }else{
-            connectionManager->startClientGame("127.0.0.1", 12345);
+            std::string ipAddress;
+            std::cin>>ipAddress;
+            connectionManager->startClientGame(ipAddress.c_str(), 12345); //"127.0.0.1", 12345);
         }
     }
     OnlineGameController();

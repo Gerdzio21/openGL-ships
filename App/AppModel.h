@@ -13,6 +13,7 @@
 #include "Game/GameController.h"
 #include "BoardConfigurator/BoardConfiguratorModel.h"
 #include "BoardConfigurator/BoardConfiguratorController.h"
+#include "BoardConfigurator/BoardConfiguratorViewer.h"
 
 enum class AppState {
     MENU,

@@ -27,17 +27,9 @@ public:
      * Constructor for the `ShipContainerController` class.
      * Initializes the controller with an empty container and fills it with ships.
      */
-    ShipContainerController() {
-        emptyContainer();
-        fillContainer();
-        selectedShipIndex = 0;
-    }
+    ShipContainerController();
 
-    ~ShipContainerController() {
-        for (Ship* ship: ships) {
-            delete ship;
-        }
-    }
+    ~ShipContainerController();
 
     /**
         * @brief Get the currently selected ship.
@@ -45,12 +37,7 @@ public:
         * @return A pointer to the currently selected ship.
         * @throw std::out_of_range If the selected ship index is invalid.
         */
-    Ship* getSelectedShip() {
-        if (selectedShipIndex < 0 || selectedShipIndex >= ships.size()) {
-            throw std::out_of_range("Invalid ship index");
-        }
-        return ships[selectedShipIndex];
-    }
+    Ship* getSelectedShip();
 
     /**
         * @brief Remove the currently selected ship from the container.
@@ -60,64 +47,38 @@ public:
         *
         * @throw std::out_of_range If the selected ship index is invalid.
         */
-    void removeSelectedShipFromContainer() {
-        if (selectedShipIndex < 0 || selectedShipIndex >= ships.size()) {
-            throw std::out_of_range("Invalid ship index");
-        }
-        if (selectedShipIndex == ships.size() - 1) {
-            ships.erase(ships.begin() + selectedShipIndex);
-            selectedShipIndex--; //ujemny index oznacza, że już nie ma statków
-        } else {
-            ships.erase(ships.begin() + selectedShipIndex);
-        }
-
-
-    }
+    void removeSelectedShipFromContainer();
 
     /**
  * @brief Check if the ship container is empty.
  *
  * @return True if the container is empty, false otherwise.
  */
-    bool isEmpty() {
-        return ships.empty();
-    }
+    bool isEmpty();
 
     /**
         * @brief Select the next ship in the container.
         */
-    void selectNextShip() {
-        selectedShipIndex = (selectedShipIndex + 1) % ships.size();
-    }
+    void selectNextShip();
 
 /**
      * @brief Select the previous ship in the container.
      */
-    void selectPreviousShip() {
-        if (selectedShipIndex == 0) {
-            selectedShipIndex = ships.size() - 1;
-        } else {
-            selectedShipIndex = (selectedShipIndex - 1) % ships.size();
-        }
-    }
+    void selectPreviousShip();
 
     /**
    * @brief Get the index of the currently selected ship.
    *
    * @return The index of the currently selected ship.
    */
-    int getSelectedShipIndex() {
-        return selectedShipIndex;
-    }
+    int getSelectedShipIndex();
 
     /**
     * @brief Get a vector of all ships in the container.
     *
     * @return A vector containing pointers to all the ships in the container.
     */
-    std::vector<Ship*> getShips() {
-        return ships;
-    };
+    std::vector<Ship*> getShips();;
 
     /**
    * @brief Handle keyboard key presses for ship selection.
@@ -126,46 +87,18 @@ public:
    * @param x The x-coordinate of the key press.
    * @param y The y-coordinate of the key press.
    */
-    void handleKeyPress(unsigned char key, int x, int y) {
-        switch (tolower(key)) {
-            case 'w':
-                selectNextShip();
-                break;
-            case 's':
-                selectPreviousShip();
-                break;
-        }
-    }
+    void handleKeyPress(unsigned char key, int x, int y);
 
 private:
     /**
     * @brief Empty the ship container.
     */
-    void emptyContainer() {
-        ships.clear();
-    }
+    void emptyContainer();
 
     /**
         * @brief Fill the ship container with ships.
         */
-    void fillContainer() {
-        factory = new AircraftCarrierFactory();
-        for (int i = 0; i < 1; i++) {
-            ships.push_back(factory->createShip());
-        }
-        factory = new BattleshipFactory();
-        for (int i = 0; i < 2; i++) {
-            ships.push_back(factory->createShip());
-        }
-        factory = new CruiserFactory();
-        for (int i = 0; i < 2; i++) {
-            ships.push_back(factory->createShip());
-        }
-        factory = new FrigateFactory();
-        for (int i = 0; i < 3; i++) {
-            ships.push_back(factory->createShip());
-        }
-    }
+    void fillContainer();
 
 private:
     std::vector<Ship*> ships;            ///< Vector of pointers to ships in the container.

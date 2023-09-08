@@ -26,57 +26,27 @@ class ShipPlacerController {
     /**
        * @brief Move the ship up on the game board.
        */
-    void moveUp() {
-        if (hullCoordinate.row > 1) {
-            hullCoordinate.row--;
-        }
-    }
+    void moveUp();
 
     /**
      * @brief Move the ship down on the game board.
      */
-    void moveDown() {
-        if (shipOrientation == ShipOrientation::Horizontal) {
-            if ((hullCoordinate.row) < 10)
-                hullCoordinate.row++;
-        } else {
-            if ((hullCoordinate.row + ship->getLength() - 1) < 10) {
-                hullCoordinate.row++;
-            }
-        }
-    }
+    void moveDown();
 
     /**
     * @brief Move the ship left on the game board.
     */
-    void moveLeft() {
-        if (hullCoordinate.col > 'A') {
-            hullCoordinate.col--;
-        }
-    }
+    void moveLeft();
 
 /**
      * @brief Move the ship right on the game board.
      */
-    void moveRight() {
-        if (shipOrientation == ShipOrientation::Horizontal) {
-            if ((hullCoordinate.col + ship->getLength() - 1) < 'J')
-                hullCoordinate.col++;
-        } else {
-            if ((hullCoordinate.col) < 'J') {
-                hullCoordinate.col++;
-            }
-        }
-    }
+    void moveRight();
 
     /**
         * @brief Rotate the ship (change its orientation) on the game board.
         */
-    void rotateShip() {
-        if ((hullCoordinate.col + ship->getLength() - 1) <= 'J' && (hullCoordinate.row + ship->getLength() - 1) <= 10) {
-            shipOrientation = changeOrientation(shipOrientation);
-        }
-    }
+    void rotateShip();
 
 public:
     /**
@@ -84,36 +54,28 @@ public:
     *
     * Initializes the controller with no ship to place.
     */
-    ShipPlacerController() {
-        ship = nullptr;
-    }
+    ShipPlacerController();
 
     /**
      * @brief Destructor for the `ShipPlacerController` class.
      *
      * Deletes the dynamically allocated ship object if one is present.
      */
-    ~ShipPlacerController() {
-        delete ship;
-    }
+    ~ShipPlacerController();
 
     /**
      * @brief Add a ship to be placed on the game board.
      *
      * @param selectedShip Pointer to the ship to be placed.
      */
-    void addShipToPlace(Ship* selectedShip) {
-        ship = selectedShip;
-    }
+    void addShipToPlace(Ship* selectedShip);
 
     /**
         * @brief Check if the ship placement controller is empty (no ship to place).
         *
         * @return True if no ship is currently set for placement, false otherwise.
         */
-    bool isPlacerEmpty() {
-        return ship == nullptr;
-    }
+    bool isPlacerEmpty();
 
     /**
         * @brief Handle keyboard key presses for ship placement.
@@ -122,61 +84,39 @@ public:
         * @param x The x-coordinate of the key press.
         * @param y The y-coordinate of the key press.
         */
-    void handleKeyPress(unsigned char key, int x, int y) {
-        switch (tolower(key)) {
-            case 'w':
-                moveUp();
-                break;
-            case 's':
-                moveDown();
-                break;
-            case 'a':
-                moveLeft();
-                break;
-            case 'd':
-                moveRight();
-                break;
-            case 'r':
-                rotateShip();
-                break;
-        }
-    }
+    void handleKeyPress(unsigned char key, int x, int y);
 
     /**
        * @brief Reset the ship placement controller to an empty state.
        */
-    void emptyPlacer() {
-        shipOrientation = ShipOrientation::Horizontal;
-        hullCoordinate = Coordinate('A', 1);
-        ship = nullptr;
-    }
+    void emptyPlacer();
 
 /**
      * @brief Get the ship currently set for placement.
      *
      * @return Pointer to the ship to be placed.
      */
-    Ship* getShip() {
-        return ship;
-    }
+    Ship* getShip();
 
     /**
      * @brief Get the hull position (coordinate) of the ship to be placed.
      *
      * @return The coordinate of the ship's hull.
      */
-    Coordinate getHullPosition() {
-        return hullCoordinate;
-    }
+    Coordinate getHullPosition();
 
     /**
     * @brief Get the current orientation of the ship to be placed.
     *
     * @return The orientation of the ship.
     */
-    ShipOrientation getShipOrientation() {
-        return shipOrientation;
-    }
+    ShipOrientation getShipOrientation();
+
+    void setCol(char col);
+
+    void setRow(int row);
+
+    void setOrientation(ShipOrientation orientation);
 };
 
 

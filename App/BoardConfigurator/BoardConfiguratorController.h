@@ -7,12 +7,6 @@
 
 
 #include "BoardConfiguratorModel.h"
-#include "BoardConfiguratorViewer.h"
-#include "../GameElements/Board.h"
-#include "../GameElements/Ships/Ship.h"
-#include "../GameElements/ShipOrientation.h"
-#include "ShipPlacerController.h"
-#include "ShipContainerController.h"
 #include "../SceneController.h"
 
 /**
@@ -46,26 +40,7 @@ public:
        * @param x The x-coordinate of the mouse.
        * @param y The y-coordinate of the mouse.
        */
-    virtual void handleKeyPress(unsigned char key, int x, int y) {
-        if (key == 13) {  //ENTER
-            if (boardConfiguratorModel->getState() == State::SelectShip) {
-                if (!boardConfiguratorModel->isShipContainerEmpty()) {
-                    boardConfiguratorModel->selectShip();
-                }
-            } else if (boardConfiguratorModel->getState() == State::PlaceShip) {
-                boardConfiguratorModel->placeShip();
-            }
-        } else if (key == 27) {  //ESCAPE
-            boardConfiguratorModel->abandonPlacementProcedure();
-        }
-        if (boardConfiguratorModel->getState() != State::BoardReady) {
-            if (!boardConfiguratorModel->isShipPlacerEmpty()) {
-                boardConfiguratorModel->getShipPlacerController()->handleKeyPress(key, x, y);
-            } else {
-                boardConfiguratorModel->getShipContainerController()->handleKeyPress(key, x, y);
-            }
-        }
-    }
+    virtual void handleKeyPress(unsigned char key, int x, int y);
 
 private:
     BoardConfiguratorModel* boardConfiguratorModel; ///< Pointer to the board configurator model

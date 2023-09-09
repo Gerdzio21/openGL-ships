@@ -13,66 +13,32 @@
 
 class OnlineGameController {
     ConnectionManager* connectionManager;
-    Response getResponse(){
-        return Response(connectionManager->receiveMessage());
-    }
+    Response getResponse();
 public:
-    OnlineGameController(ConnectionManager* connectionManager1, bool hostGame){
-        connectionManager = connectionManager1;
-        if(hostGame){
-            connectionManager->startServerGame();
-        }else{
-            std::string ipAddress;
-            std::cin>>ipAddress;
-            connectionManager->startClientGame(ipAddress.c_str(), 12345); //"127.0.0.1", 12345);
-        }
-    }
+    OnlineGameController(ConnectionManager* connectionManager1, bool hostGame);
     OnlineGameController();
 
-    Response attack(Coordinate coordinate){
-        connectionManager->sendMessage("ATTACK:"+coordinate.toString());
-        return getResponse();
-    }
-    Response getMove() {
-        return getResponse();
-    }
+    Response attack(Coordinate coordinate);
+    Response getMove();
 
-    void postAttackResult(AttackResult attackResult){
-        connectionManager->sendMessage("RESULT:"+ AttackResultToString(attackResult));
-    }
+    void postAttackResult(AttackResult attackResult);
 
-    void postAttackMove(char col, int row) {
-        connectionManager->sendMessage(col + std::to_string(row));
-    }
+    void postAttackMove(char col, int row);
 
-    std::string getAttackResult() {
-        return connectionManager->receiveMessage();
-    }
+    std::string getAttackResult();
 
-    void postSunk() {
-        connectionManager->sendMessage("SUNK");
-    }
+    void postSunk();
 
-    void postHit() {
-        connectionManager->sendMessage("HIT");
-    }
+    void postHit();
 
-    void postMissed() {
-        connectionManager->sendMessage("MISS");
-    }
+    void postMissed();
 
-    std::string getReadyForAnswering() {
-        return connectionManager->receiveMessage();
-    }
+    std::string getReadyForAnswering();
 
-    void postReadyForAnswering() {
-        connectionManager->sendMessage("STATUS:CHANGE");
-    }
+    void postReadyForAnswering();
 
 
-    void postError() {
-        connectionManager->sendMessage("RESPONSE_ERROR:ERROR");
-    }
+    void postError();
 };
 
 

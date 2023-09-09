@@ -11,20 +11,11 @@
 class ShipSector {
     int health;
 public:
-    ShipSector() {
-        health = 100;
-    }
+    ShipSector();
 
-    void damage(int damageValue) {
-        if (isDestroyed()) {
-            throw AttackException("Sector is already crashed!");
-        }
-        health -= damageValue;
-    }
+    void damage(int damageValue);
 
-    [[nodiscard]] bool isDestroyed() const {
-        return health <= 0;
-    }
+    [[nodiscard]] bool isDestroyed() const;
 };
 
 

@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <map>
+#include "../GameElements/Board.h"
 #include "../GameElements/Coordinate.h"
 
 /**
@@ -28,18 +29,7 @@ enum AttackResult {
  * @param input The input string to map.
  * @return The corresponding AttackResult enum value.
  */
-AttackResult mapStringToAttackResult(const std::string& input) {
-    if (input == "HIT") {
-        return HIT;
-    } else if (input == "MISS") {
-        return MISS;
-    } else if (input == "SUNK") {
-        return SUNK;
-    } else if (input == "GAME_END") {
-        return GAME_END;
-    }
-    return HIT;
-}
+AttackResult mapStringToAttackResult(const std::string& input);
 
 /**
  * @brief Convert an AttackResult enum to a string.
@@ -47,19 +37,7 @@ AttackResult mapStringToAttackResult(const std::string& input) {
  * @param enumValue The AttackResult enum value.
  * @return The string representation of the enum value.
  */
-std::string AttackResultToString(AttackResult enumValue) {
-    static std::map<AttackResult, std::string> enumMap = {
-            {HIT,  "HIT"},
-            {MISS, "MISS"},
-            {SUNK, "SUNK"}
-    };
-
-    auto it = enumMap.find(enumValue);
-    if (it != enumMap.end()) {
-        return it->second;
-    }
-    return "Unknown"; // Możesz zwrócić odpowiednią wartość domyślną
-}
+std::string AttackResultToString(AttackResult enumValue);
 
 /**
  * @enum Turn
@@ -105,11 +83,7 @@ public:
      *
      * @param localPlayerBoardPtr Pointer to the local player's game board.
      */
-    GameModel(Board* localPlayerBoardPtr) {
-        localPlayerBoard = localPlayerBoardPtr;
-        opponentBoard = new Board();
-        turn = LOCAL_PLAYER;
-    }
+    GameModel(Board* localPlayerBoardPtr);
 
     /**
    * @brief Check if an attack move is valid.
@@ -117,25 +91,19 @@ public:
    * @param coordinate The coordinate of the attack move.
    * @return True if the attack move is valid, false otherwise.
    */
-    bool isAttackMoveValid(Coordinate coordinate) {
-        return (coordinate.col >= 'A' && coordinate.col <= 'J' && coordinate.row >= 1 && coordinate.row <= 10);
-    }
+    bool isAttackMoveValid(Coordinate coordinate);
 
     /**
     * @brief Get the current player's turn.
     *
     * @return The current player's turn.
     */
-    Turn getTurn() {
-        return turn;
-    }
+    Turn getTurn();
 
     /**
      * @brief Set the turn to the opponent's turn.
      */
-    void setOpponentTurn() {
-        turn = OPPONENT;
-    }
+    void setOpponentTurn();
 
     /**
     * @brief Process the result of an attack move.
@@ -145,16 +113,7 @@ public:
     * @param result The result of the attack move.
     * @param coordinate The coordinate of the attack.
     */
-    void processAttackResult(AttackResult result, Coordinate coordinate) {
-        if (result == HIT || result == SUNK) {
-            markField(opponentBoard->getField(coordinate.col, coordinate.row), "HIT");
-        } else if (result == MISS) {
-            markField(opponentBoard->getField(coordinate.col, coordinate.row), "MISS");
-            turn = OPPONENT;
-        } else if (result == GAME_END) {
-            turn = END;
-        }
-    }
+    void processAttackResult(AttackResult result, Coordinate coordinate);
 
     /**
     * @brief Process the opponent's attack move.
@@ -164,53 +123,21 @@ public:
     * @param potentialCoordinates The potential attack coordinates from the opponent.
     * @return The result of the opponent's attack.
     */
-    AttackResult processOpponentAttack(std::string potentialCoordinates) {
-        Coordinate coordinates = Coordinate(potentialCoordinates);
-        if (isAttackMoveValid(coordinates)) {
-            Field* field = localPlayerBoard->getField(coordinates.col, coordinates.row);
-            if (field != nullptr) {
-                if (field->getFieldStatus() == FieldStatus::OccupiedByShip) {
-                    int sectorIdx = field->getShipSectorIdx();
-                    Ship* ship = field->getShip();
-                    ship->hitSector(sectorIdx);
-                    markField(localPlayerBoard->getField(coordinates.col, coordinates.row), "HIT");
-                    if (ship->isDestroyed()) {
-                        localPlayerBoard->moveToDestroyedShips(ship);
-                        if (localPlayerBoard->getNumberOfAliveShips() == 0) {
-                            turn = END;
-                            return GAME_END;
-                        }
-                        return SUNK;
-                    }
-                    return HIT;
-                } else if (field->getFieldStatus() == FieldStatus::Free ||
-                           field->getFieldStatus() == FieldStatus::SurroundsShip) {
-                    markField(localPlayerBoard->getField(coordinates.col, coordinates.row), "MISS");
-                    turn = LOCAL_PLAYER;
-                    return MISS;
-                }
-            }
-        }
-        return GAME_END;
-    }
+    AttackResult processOpponentAttack(std::string potentialCoordinates);
 
     /**
         * @brief Get the local player's game board.
         *
         * @return Pointer to the local player's game board.
         */
-    Board* getLocalPlayerBoard() {
-        return localPlayerBoard;
-    }
+    Board* getLocalPlayerBoard();
 
     /**
     * @brief Get the opponent's game board.
     *
     * @return Pointer to the opponent's game board.
     */
-    Board* getOpponentBoard() {
-        return opponentBoard;
-    }
+    Board* getOpponentBoard();
 
 /**
      * @brief Destructor for the `GameModel` class.
@@ -222,59 +149,43 @@ public:
         *
         * @param msg The message to display.
         */
-    void setMessage(std::string msg) {
-        message = msg;
-    }
+    void setMessage(std::string msg);
 
 /**
      * @brief Clear the text input.
      */
-    void clearText() {
-        text.clear();
-    }
+    void clearText();
 
     /**
      * @brief Clear the message displayed in the game.
      */
-    void clearMessage() {
-        message.clear();
-    }
+    void clearMessage();
 
     /**
         * @brief Get the current text input.
         *
         * @return The current text input.
         */
-    std::string getText() {
-        return text;
-    }
+    std::string getText();
 
     /**
         * @brief Append a character to the text input.
         *
         * @param c The character to append.
         */
-    void textAppend(char c) {
-        text += c;
-    }
+    void textAppend(char c);
 
     /**
         * @brief Remove the last character from the text input.
         */
-    void removeFromText() {
-        if (!text.empty()) {
-            text.pop_back();
-        }
-    }
+    void removeFromText();
 
     /**
         * @brief Get the current message displayed in the game.
         *
         * @return The current message displayed in the game.
         */
-    std::string getMessage() {
-        return message;
-    }
+    std::string getMessage();
 
 private:
     Board* localPlayerBoard;    ///< Pointer to the local player's game board.
@@ -289,13 +200,7 @@ private:
      * @param field The game field to mark.
      * @param attackResult The attack result to set on the field.
      */
-    void markField(Field* field, std::string attackResult) {
-        if (attackResult == "HIT") {
-            field->setFieldStatus(FieldStatus::Hit);
-        } else {
-            field->setFieldStatus(FieldStatus::Missed);
-        }
-    }
+    void markField(Field* field, std::string attackResult);
 };
 
 

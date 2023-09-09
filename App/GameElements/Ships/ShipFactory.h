@@ -22,30 +22,22 @@ public:
 
 class AircraftCarrierFactory : public ShipFactory {
 public:
-    Ship* createShip() override {
-        return new AircraftCarrier();
-    }
+    Ship* createShip() override;
 };
 
 class BattleshipFactory : public ShipFactory {
 public:
-    Ship* createShip() override {
-        return new Battleship();
-    }
+    Ship* createShip() override;
 };
 
 class CruiserFactory : public ShipFactory {
 public:
-    Ship* createShip() override {
-        return new Cruiser();
-    }
+    Ship* createShip() override;
 };
 
 class FrigateFactory : public ShipFactory {
 public:
-    Ship* createShip() override {
-        return new Frigate();
-    }
+    Ship* createShip() override;
 };
 
 
